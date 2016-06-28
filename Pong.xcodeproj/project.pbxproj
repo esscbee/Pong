@@ -12,11 +12,12 @@
 		D6C53DD71D23243C0080258C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C53DD61D23243C0080258C /* GameScene.swift */; };
 		D6C53DD91D23243C0080258C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C53DD81D23243C0080258C /* GameViewController.swift */; };
 		D6C53DDC1D23243C0080258C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6C53DDA1D23243C0080258C /* Main.storyboard */; };
-		D6C53DDE1D23243C0080258C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6C53DDD1D23243C0080258C /* Assets.xcassets */; };
 		D6C53DE11D23243C0080258C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6C53DDF1D23243C0080258C /* LaunchScreen.storyboard */; };
 		D6C53DEC1D23243C0080258C /* PongTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C53DEB1D23243C0080258C /* PongTests.swift */; };
 		D6C53DF71D23243C0080258C /* PongUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C53DF61D23243C0080258C /* PongUITests.swift */; };
 		D6C53E051D2324C20080258C /* Ball.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6C53E041D2324C20080258C /* Ball.sks */; };
+		D6C53E071D23290D0080258C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6C53E061D23290D0080258C /* Images.xcassets */; };
+		D6C53E091D232E060080258C /* Wobble.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6C53E081D232E060080258C /* Wobble.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +44,6 @@
 		D6C53DD61D23243C0080258C /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		D6C53DD81D23243C0080258C /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		D6C53DDB1D23243C0080258C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		D6C53DDD1D23243C0080258C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6C53DE01D23243C0080258C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6C53DE21D23243C0080258C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6C53DE71D23243C0080258C /* PongTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PongTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +53,8 @@
 		D6C53DF61D23243C0080258C /* PongUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PongUITests.swift; sourceTree = "<group>"; };
 		D6C53DF81D23243C0080258C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6C53E041D2324C20080258C /* Ball.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Ball.sks; sourceTree = "<group>"; };
+		D6C53E061D23290D0080258C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		D6C53E081D232E060080258C /* Wobble.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = Wobble.sks; path = ../Wobble.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,15 +105,16 @@
 		D6C53DD11D23243C0080258C /* Pong */ = {
 			isa = PBXGroup;
 			children = (
+				D6C53E081D232E060080258C /* Wobble.sks */,
 				D6C53DD21D23243C0080258C /* AppDelegate.swift */,
 				D6C53DD41D23243C0080258C /* GameScene.sks */,
 				D6C53E041D2324C20080258C /* Ball.sks */,
 				D6C53DD61D23243C0080258C /* GameScene.swift */,
 				D6C53DD81D23243C0080258C /* GameViewController.swift */,
 				D6C53DDA1D23243C0080258C /* Main.storyboard */,
-				D6C53DDD1D23243C0080258C /* Assets.xcassets */,
 				D6C53DDF1D23243C0080258C /* LaunchScreen.storyboard */,
 				D6C53DE21D23243C0080258C /* Info.plist */,
+				D6C53E061D23290D0080258C /* Images.xcassets */,
 			);
 			path = Pong;
 			sourceTree = "<group>";
@@ -239,8 +242,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6C53DD51D23243C0080258C /* GameScene.sks in Resources */,
+				D6C53E071D23290D0080258C /* Images.xcassets in Resources */,
+				D6C53E091D232E060080258C /* Wobble.sks in Resources */,
 				D6C53DE11D23243C0080258C /* LaunchScreen.storyboard in Resources */,
-				D6C53DDE1D23243C0080258C /* Assets.xcassets in Resources */,
 				D6C53E051D2324C20080258C /* Ball.sks in Resources */,
 				D6C53DDC1D23243C0080258C /* Main.storyboard in Resources */,
 			);
@@ -500,6 +504,7 @@
 				D6C53DFD1D23243C0080258C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D6C53DFE1D23243C0080258C /* Build configuration list for PBXNativeTarget "PongTests" */ = {
 			isa = XCConfigurationList;
@@ -508,6 +513,7 @@
 				D6C53E001D23243C0080258C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D6C53E011D23243C0080258C /* Build configuration list for PBXNativeTarget "PongUITests" */ = {
 			isa = XCConfigurationList;
@@ -516,6 +522,7 @@
 				D6C53E031D23243C0080258C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

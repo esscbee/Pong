@@ -76,8 +76,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enumerateChildNodesWithName("//ball", usingBlock: {
             node, stop in
             
+            
+            
             let pb = node.physicsBody!
-            let v = pb.velocity
+            var v = pb.velocity
             let mag = pow(v.dx*v.dx + v.dy*v.dy, 0.5)
             
             if false {
@@ -87,10 +89,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             } else {
                 
-                let minDy : CGFloat = 500.0 + CGFloat(self.score) * 5.0
-                if abs(v.dy) < minDy {
-                    let sign : CGFloat = v.dy < 0 ? -1 : 1
-                    pb.velocity = CGVector(dx:v.dx, dy: CGFloat(sign * minDy))
+                if let  n = node.parent?.parent {
+                    let pt = self.convertPoint(n.position, fromNode: n)
+                    print("ball position: \(pt)")
+                    if !CGRectContainsPoint(self.frame, pt) {
+                        print("toDelete - frame: \(self.frame), pt: \(pt)")
+                        toDelete.append(node)
+                    } else {
+                        
+                        let minDy : CGFloat = 500.0 + CGFloat(self.score) * 5.0
+                        if abs(v.dy) < minDy {
+                            let sign : CGFloat = v.dy < 0 ? -1 : 1
+                            v = CGVector(dx:v.dx, dy: CGFloat(sign * minDy))
+                            pb.velocity = v
+                        }
+                        
+                        let minDx = CGFloat(200.0)
+                        if abs(v.dx) < minDx {
+                            let sign : CGFloat = v.dy < 0 ? -1 : 1
+                            pb.velocity = CGVector(dx: minDx * sign, dy: v.dy)
+                        }}
                 }
             }
         })

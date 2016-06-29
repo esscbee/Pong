@@ -32,6 +32,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var touchPaddle : SKSpriteNode?
     
+    func launchBall(location : CGPoint) {
+        // launch a ball
+        let newBall = SKSpriteNode(imageNamed: "ball")
+        newBall.position = location
+        newBall.name = "ball"
+        let theScale :CGFloat = 0.5
+        newBall.xScale = theScale
+        newBall.yScale = theScale
+        let pb = SKPhysicsBody(circleOfRadius: newBall.size.width / 2.0)
+        pb.affectedByGravity = false
+        pb.mass = 1
+        pb.friction = 0
+        pb.angularDamping = 0
+        pb.linearDamping = 0
+        pb.restitution = 1
+        pb.categoryBitMask = 0xffffffff
+        pb.collisionBitMask = 0xffffffff
+        pb.contactTestBitMask = 0xffffffff
+        pb.velocity = CGVector( dx: random() % 200 - 100, dy: random() % 100 + 100)
+        
+        newBall.physicsBody = pb
+        self.addChild(newBall)
+
+    }
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if let node = self.childNodeWithName("//Paddle") {
             for touch in touches {
@@ -45,12 +69,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.touchPaddle = node as? SKSpriteNode
                 } else if (node.position.y + node.frame.size.height) < location.y {
                     
-                    // launch a ball
-                    let resourcePath = NSBundle.mainBundle().pathForResource("Ball", ofType: "sks")
-                    let newBall = SKReferenceNode (URL: NSURL (fileURLWithPath: resourcePath!))
-                    newBall.position = location
-                    self.addChild(newBall)
-
+                    launchBall(location)
                 }
             }
         }
@@ -88,12 +107,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     pb.velocity = CGVector(dx: v.dx / mul, dy: v.dy / mul)
                 }
             } else {
-                
-                if let  n = node.parent?.parent {
-                    let pt = self.convertPoint(n.position, fromNode: n)
-                    print("ball position: \(pt)")
+                let n = node
+                if true {
+                    let pt = n.position
+//                    print("ball position: \(pt)")
                     if !CGRectContainsPoint(self.frame, pt) {
-                        print("toDelete - frame: \(self.frame), pt: \(pt)")
+                        // print("toDelete - frame: \(self.frame), pt: \(pt)")
                         toDelete.append(node)
                     } else {
                         
@@ -118,7 +137,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func killBall(b : SKNode) {
-        b.parent!.parent!.removeFromParent()
+        b.removeFromParent()
         score -= 3
     }
     

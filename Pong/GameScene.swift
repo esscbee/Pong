@@ -12,7 +12,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var scoreLabel : SKLabelNode?
     
-    var canScore = false
+    var canScore = [ SKNode ] ()
     
     var score : Int = 0 {
         didSet {
@@ -43,7 +43,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if(CGRectContainsPoint(nodeFrame, location)) {
                     node.physicsBody?.dynamic = false
                     self.touchPaddle = node as? SKSpriteNode
-                } else {
+                } else if (node.position.y + node.frame.size.height) < location.y {
+                    
                     // launch a ball
                     let resourcePath = NSBundle.mainBundle().pathForResource("Ball", ofType: "sks")
                     let newBall = SKReferenceNode (URL: NSURL (fileURLWithPath: resourcePath!))
@@ -70,6 +71,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
    
 
     override func update(currentTime: CFTimeInterval) {
+        var toDelete = [ SKNode]()
+        
         enumerateChildNodesWithName("//ball", usingBlock: {
             node, stop in
             
@@ -83,13 +86,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     pb.velocity = CGVector(dx: v.dx / mul, dy: v.dy / mul)
                 }
             } else {
-                let minDy : CGFloat = 500.0
+                
+                let minDy : CGFloat = 500.0 + CGFloat(self.score) * 5.0
                 if abs(v.dy) < minDy {
                     let sign : CGFloat = v.dy < 0 ? -1 : 1
                     pb.velocity = CGVector(dx:v.dx, dy: CGFloat(sign * minDy))
                 }
             }
         })
+        for b in toDelete {
+            killBall(b)
+        }
+    }
+    
+    func killBall(b : SKNode) {
+        b.parent!.parent!.removeFromParent()
+        score -= 3
     }
     
     func resetPhysics() {
@@ -125,10 +137,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let b = ball {
                 if let n = b.name {
                     if n == "ball" {
-                        canScore = true
-                        if contact.contactPoint.y < 5 {
-                            b.parent!.parent!.removeFromParent()
-                            score -= 3
+                        let idx = canScore.indexOf(b)
+                        if idx == nil {
+                            canScore.append(b)
+                        }
+                        if contact.contactPoint.y < 7 {
+                            killBall(b)
 //                            if false {
 //                                print("didBeginContact")
 //                                print("  A: \(contact.bodyA)")
@@ -139,11 +153,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
             }
-        } else if(canScore) {
-            if let _ = ball {
+        } else if(canScore.count != 0) {
+            if let b = ball {
                 if let _ = paddle {
-                    score += 1
-                    canScore = false
+                    if let idx = canScore.indexOf(b) {
+                        canScore.removeAtIndex(idx)
+                        enumerateChildNodesWithName("//ball", usingBlock: {
+                            node, stop in
+                            self.score += 1
+                        })
+                    }
                 }
             }
         }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D629F1F11D24385C00573662 /* Paddle.sks in Resources */ = {isa = PBXBuildFile; fileRef = D629F1F01D24385C00573662 /* Paddle.sks */; };
 		D6C53DD31D23243C0080258C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C53DD21D23243C0080258C /* AppDelegate.swift */; };
 		D6C53DD51D23243C0080258C /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D6C53DD41D23243C0080258C /* GameScene.sks */; };
 		D6C53DD71D23243C0080258C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C53DD61D23243C0080258C /* GameScene.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D629F1F01D24385C00573662 /* Paddle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Paddle.sks; sourceTree = "<group>"; };
 		D6C53DCF1D23243C0080258C /* Pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pong.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6C53DD21D23243C0080258C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D6C53DD41D23243C0080258C /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				D6C53E081D232E060080258C /* Wobble.sks */,
 				D6C53DD21D23243C0080258C /* AppDelegate.swift */,
 				D6C53DD41D23243C0080258C /* GameScene.sks */,
+				D629F1F01D24385C00573662 /* Paddle.sks */,
 				D6C53E041D2324C20080258C /* Ball.sks */,
 				D6C53DD61D23243C0080258C /* GameScene.swift */,
 				D6C53DD81D23243C0080258C /* GameViewController.swift */,
@@ -247,6 +250,7 @@
 				D6C53DE11D23243C0080258C /* LaunchScreen.storyboard in Resources */,
 				D6C53E051D2324C20080258C /* Ball.sks in Resources */,
 				D6C53DDC1D23243C0080258C /* Main.storyboard in Resources */,
+				D629F1F11D24385C00573662 /* Paddle.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

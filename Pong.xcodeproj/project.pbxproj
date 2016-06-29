@@ -109,8 +109,8 @@
 			children = (
 				D6C53E081D232E060080258C /* Wobble.sks */,
 				D6C53DD21D23243C0080258C /* AppDelegate.swift */,
-				D6C53DD41D23243C0080258C /* GameScene.sks */,
 				D629F1F01D24385C00573662 /* Paddle.sks */,
+				D6C53DD41D23243C0080258C /* GameScene.sks */,
 				D6C53E041D2324C20080258C /* Ball.sks */,
 				D6C53DD61D23243C0080258C /* GameScene.swift */,
 				D6C53DD81D23243C0080258C /* GameViewController.swift */,

@@ -10,13 +10,20 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
+    
+    var gameScene : GameScene?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        resetGame()
 
-        if let scene = GameScene(fileNamed:"GameScene") {
+    }
+    func resetGame() {
+        let skView = self.view as! SKView
+        gameScene = GameScene(fileNamed:"GameScene")
+        if let scene = gameScene {
             // Configure the view.
-            let skView = self.view as! SKView
             skView.showsFPS = true
             skView.showsNodeCount = true
             
@@ -28,8 +35,8 @@ class GameViewController: UIViewController {
             
             skView.presentScene(scene)
         }
-    }
 
+    }
     override func shouldAutorotate() -> Bool {
         return true
     }
@@ -50,4 +57,11 @@ class GameViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
+    
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
+        if motion == .MotionShake {
+            resetGame()
+        }
+    }
+
 }

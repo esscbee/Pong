@@ -9,7 +9,20 @@
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    var scoreLabel : SKLabelNode?
+    
+    var canScore = false
+    
+    var score : Int = 0 {
+        didSet {
+            if let sl = scoreLabel {
+                sl.text = String(score)
+            }
+        }
+    }
     override func didMoveToView(view: SKView) {
+        scoreLabel = self.childNodeWithName("//Score") as? SKLabelNode
         self.physicsWorld.gravity = CGVectorMake(0, 0)
         self.physicsWorld.contactDelegate = self
         self.scaleMode = SKSceneScaleMode.ResizeFill
@@ -23,7 +36,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let node = self.childNodeWithName("//Paddle") {
             for touch in touches {
                 let location = touch.locationInNode(self)
-                let nodePosition = self.convertPoint(node.position, fromNode: node)
                 let nodeFrame = node.frame // CGRect(origin: nodePosition, size: node.frame.size)
 //                print("touch")
 //                print("  location: \(location)")
@@ -58,16 +70,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
    
 
     override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
-        return
-        if let ball = childNodeWithName("//ball") {
-            if let pb = ball.physicsBody {
-                print(String(format:"%X", pb.categoryBitMask), " \(pb.velocity)")
-                if let pb2 = physicsBody {
-                    print(String(format:"%X", pb2.collisionBitMask), " ", frame)
+        enumerateChildNodesWithName("//ball", usingBlock: {
+            node, stop in
+            
+            let pb = node.physicsBody!
+            let v = pb.velocity
+            let mag = pow(v.dx*v.dx + v.dy*v.dy, 0.5)
+            
+            if false {
+                let mul = mag / 800.0
+                if mul < 1 {
+                    pb.velocity = CGVector(dx: v.dx / mul, dy: v.dy / mul)
+                }
+            } else {
+                let minDy : CGFloat = 500.0
+                if abs(v.dy) < minDy {
+                    let sign : CGFloat = v.dy < 0 ? -1 : 1
+                    pb.velocity = CGVector(dx:v.dx, dy: CGFloat(sign * minDy))
                 }
             }
-        }
+        })
     }
     
     func resetPhysics() {
@@ -85,26 +107,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBeginContact(contact: SKPhysicsContact) {
         var scene : SKNode?
         var ball : SKNode?
+        var paddle : SKNode?
         
-        if let s = contact.bodyA.node as? SKScene {
-            scene = s
-            ball = contact.bodyB.node
-        } else if let s = contact.bodyB.node as? SKScene {
-            scene = s
-            ball = contact.bodyA.node
+        for n in [contact.bodyA.node, contact.bodyB.node ] {
+            if let s = n as? SKScene {
+                scene = s
+                ball = contact.bodyB.node
+            } else if let s = n {
+                if s.name == "ball" {
+                    ball = s
+                } else if s.name == "Paddle" {
+                    paddle = s
+                }
+            }
         }
-        if let s = scene {
+        if let _ = scene {
             if let b = ball {
                 if let n = b.name {
                     if n == "ball" {
+                        canScore = true
                         if contact.contactPoint.y < 5 {
                             b.parent!.parent!.removeFromParent()
-                            print("didBeginContact")
-                            print("  A: \(contact.bodyA)")
-                            print("  B: \(contact.bodyB)")
-                            print("  contact: \(contact.contactPoint)")
+                            score -= 3
+//                            if false {
+//                                print("didBeginContact")
+//                                print("  A: \(contact.bodyA)")
+//                                print("  B: \(contact.bodyB)")
+//                                print("  contact: \(contact.contactPoint)")
+//                            }
                         }
                     }
+                }
+            }
+        } else if(canScore) {
+            if let _ = ball {
+                if let _ = paddle {
+                    score += 1
+                    canScore = false
                 }
             }
         }

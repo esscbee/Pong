@@ -79,8 +79,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     paddleTouch = true
                 }
                 
-                if (node.position.y + node.frame.size.height) < location.y {
-                    location = CGPoint(x: location.x, y: node.position.y + node.frame.size.height + 100)
+                let minY = node.position.y + node.frame.size.height + 1
+                
+                if minY > location.y {
+                    location = CGPoint(x: location.x, y: minY)
                 }
                 launchBall(location)
             }

@@ -35,6 +35,9 @@ class ScbBall : SKSpriteNode {
         "656099-glass-sphere-clear",
         "ball",
     ]
+    var isDead = false
+    
+    
     var pointValue : Int {
         get {
             return hits == 0 ? 1 : 3 * hits
@@ -48,6 +51,10 @@ class ScbBall : SKSpriteNode {
     
     func gotPaddled() {
         hits += 1
+    }
+    
+    func kill() {
+        isDead = true
     }
     
     

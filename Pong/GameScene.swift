@@ -109,7 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
    
 
     override func update(currentTime: CFTimeInterval) {
-        var toDelete = [ SKNode]()
+        var toDelete = [ ScbBall]()
         
         enumerateChildNodesWithName("//ball", usingBlock: {
             node, stop in
@@ -119,13 +119,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let pb = node.physicsBody!
             var v = pb.velocity
             
-            let n = node
-            if true {
+            if let n = node as? ScbBall {
                 let pt = n.position
                 //                    print("ball position: \(pt)")
                 if !CGRectContainsPoint(self.frame, pt) {
                     // print("toDelete - frame: \(self.frame), pt: \(pt)")
-                    toDelete.append(node)
+                    toDelete.append(n)
                 } else {
                     
                     let minDy : CGFloat = 200.0 + CGFloat(self.score) * 0.1
@@ -147,8 +146,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func killBall(b : SKNode) {
-        b.removeFromParent()
+    func killBall(b : ScbBall) {
+        
+        if b.isDead {
+            return
+        }
+        b.kill()
+        if let pb  = b.physicsBody {
+            pb.velocity = CGVector(dx: 0, dy: 0)
+            pb.categoryBitMask = 0
+        }
+        let grow = SKAction.scaleTo(3, duration: 0.08)
+        let shrink = SKAction.scaleTo(0, duration: 0.08)
+        let remove = SKAction.removeFromParent()
+        let seq = SKAction.sequence([ grow, shrink, remove ])
+        b.runAction(seq)
         score -= ballCount
         ballCount -= 1
     }

@@ -14,6 +14,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var canScore = [ SKNode ] ()
     
+    var paddleTouch = false
+    
     var score : Int = 0 {
         didSet {
             if let sl = scoreLabel {
@@ -30,7 +32,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print(frame)
     }
     
-    var touchPaddle : SKSpriteNode?
+    var touchPaddle = [UITouch: SKSpriteNode]()
     
     func launchBall(location : CGPoint) {
         // launch a ball
@@ -64,9 +66,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //                print("touch")
 //                print("  location: \(location)")
 //                print("  nodeFrame: \(nodeFrame)")
-                if(CGRectContainsPoint(nodeFrame, location)) {
+                if(touchPaddle.isEmpty && CGRectContainsPoint(nodeFrame, location)) {
                     node.physicsBody?.dynamic = false
-                    self.touchPaddle = node as? SKSpriteNode
+                    self.touchPaddle[touch] = node as? SKSpriteNode
+                    paddleTouch = true
                 } else if (node.position.y + node.frame.size.height) < location.y {
                     
                     launchBall(location)
@@ -76,16 +79,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let tn = touchPaddle {
-            if let t = touches.first {
-                let location = t.locationInNode(self)
-                tn.position = location
+        for t in touches {
+            if let tn = touchPaddle[t] {
+                paddleTouch = true
+                if let t = touches.first {
+                    let location = t.locationInNode(self)
+                    tn.position = location
+                }
             }
         }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        touchPaddle = nil
+        for t in touches {
+            touchPaddle[t] = nil
+        }
     }
    
 
@@ -164,6 +172,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 ball = contact.bodyB.node
             } else if let s = n {
                 if s.name == "ball" {
+//                    if let b = ball {
+//                        killBall(b)
+//                        killBall(s)
+//                        return
+//                    }
                     ball = s
                 } else if s.name == "Paddle" {
                     paddle = s
@@ -190,7 +203,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
             }
-        } else if(canScore.count != 0) {
+        } else if(canScore.count != 0 && paddleTouch) {
             if let b = ball {
                 if let _ = paddle {
                     if let idx = canScore.indexOf(b) {
@@ -199,6 +212,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             node, stop in
                             self.score += 1
                         })
+                        paddleTouch = false
                     }
                 }
             }

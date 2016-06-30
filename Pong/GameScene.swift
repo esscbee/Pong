@@ -62,6 +62,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         newBall.physicsBody = pb
         self.addChild(newBall)
         
+        score -= ballCount 
         ballCount += 1
 
     }
@@ -161,7 +162,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let remove = SKAction.removeFromParent()
         let seq = SKAction.sequence([ grow, shrink, remove ])
         b.runAction(seq)
-        score -= ballCount
+        score -= ballCount * b.pointValue
         ballCount -= 1
     }
     

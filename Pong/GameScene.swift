@@ -68,7 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if let node = self.childNodeWithName("//paddle") {
             for touch in touches {
-                let location = touch.locationInNode(self)
+                var location = touch.locationInNode(self)
                 let nodeFrame = node.frame // CGRect(origin: nodePosition, size: node.frame.size)
 //                print("touch")
 //                print("  location: \(location)")
@@ -77,10 +77,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     node.physicsBody?.dynamic = false
                     self.touchPaddle[touch] = node as? SKSpriteNode
                     paddleTouch = true
-                } else if (node.position.y + node.frame.size.height) < location.y {
-                    
-                    launchBall(location)
                 }
+                
+                if (node.position.y + node.frame.size.height) < location.y {
+                    location = CGPoint(x: location.x, y: node.position.y + node.frame.size.height + 100)
+                }
+                launchBall(location)
             }
         }
     }

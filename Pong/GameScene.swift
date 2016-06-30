@@ -21,11 +21,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var ballCount = 0
     
+    var lastScore = 0
+    
     var score : Int = 0 {
         didSet {
             if let sl = scoreLabel {
                 sl.text = String(score)
+                sl.fontColor = lastScore < score ? UIColor.greenColor() : UIColor.redColor()
+                let grow = SKAction.scaleTo(1.3, duration: 0.1)
+                let shrink = SKAction.scaleTo(1, duration: 0.1)
+                let seq = SKAction.sequence([ grow, shrink ])
+                sl.runAction(seq)
             }
+            lastScore = score
         }
     }
     override func didMoveToView(view: SKView) {
@@ -62,7 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         newBall.physicsBody = pb
         self.addChild(newBall)
         
-        score -= ballCount 
+        score -= ballCount
         ballCount += 1
 
     }

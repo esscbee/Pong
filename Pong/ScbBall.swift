@@ -10,30 +10,30 @@ import SpriteKit
 
 class ScbBall : SKSpriteNode {
     
-    let images = [
-        "656099-glass-sphere-red-1",
-        "656099-glass-sphere-red",
-        "656099-glass-sphere-yellow-1",
-        "656099-glass-sphere-yellow-2",
-        "656099-glass-sphere-yellow",
-        "656099-glass-sphere-fire",
-        "656099-glass-sphere-firey-purple",
-        "656099-glass-sphere-lavendar",
-        "656099-glass-sphere-molton",
-        "656099-glass-sphere-burnt",
-        "656099-glass-sphere-normal",
-        "656099-glass-sphere-orange-2",
-        "656099-glass-sphere-orange",
-        "656099-glass-sphere-poster-1",
-        "656099-glass-sphere-purple",
-        "656099-glass-sphere-blue-1",
-        "656099-glass-sphere-blue-2",
-        "656099-glass-sphere-blue-3",
-        "656099-glass-sphere-blue-4",
-        "656099-glass-sphere-blue-5",
-        "656099-glass-sphere-blue-6",
-        "656099-glass-sphere-clear",
-        "ball",
+    static let images = [
+        SKTexture(imageNamed:"656099-glass-sphere-red-1"),
+        SKTexture(imageNamed:"656099-glass-sphere-red"),
+        SKTexture(imageNamed:"656099-glass-sphere-yellow-1"),
+        SKTexture(imageNamed:"656099-glass-sphere-yellow-2"),
+        SKTexture(imageNamed:"656099-glass-sphere-yellow"),
+        SKTexture(imageNamed:"656099-glass-sphere-fire"),
+        SKTexture(imageNamed:"656099-glass-sphere-firey-purple"),
+        SKTexture(imageNamed:"656099-glass-sphere-lavendar"),
+        SKTexture(imageNamed:"656099-glass-sphere-molton"),
+        SKTexture(imageNamed:"656099-glass-sphere-burnt"),
+        SKTexture(imageNamed:"656099-glass-sphere-normal"),
+        SKTexture(imageNamed:"656099-glass-sphere-orange-2"),
+        SKTexture(imageNamed:"656099-glass-sphere-orange"),
+        SKTexture(imageNamed:"656099-glass-sphere-poster-1"),
+        SKTexture(imageNamed:"656099-glass-sphere-purple"),
+        SKTexture(imageNamed:"656099-glass-sphere-blue-1"),
+        SKTexture(imageNamed:"656099-glass-sphere-blue-2"),
+        SKTexture(imageNamed:"656099-glass-sphere-blue-3"),
+        SKTexture(imageNamed:"656099-glass-sphere-blue-4"),
+        SKTexture(imageNamed:"656099-glass-sphere-blue-5"),
+        SKTexture(imageNamed:"656099-glass-sphere-blue-6"),
+        SKTexture(imageNamed:"656099-glass-sphere-clear"),
+        SKTexture(imageNamed:"ball"),
     ]
     var isDead = false
     
@@ -45,7 +45,10 @@ class ScbBall : SKSpriteNode {
     }
     var hits = 0 {
         didSet {
-            self.texture = SKTexture(imageNamed: images[hits % images.count])
+            self.texture =  ScbBall.images[hits % ScbBall.images.count]
+            if let pb = self.physicsBody {
+                pb.mass *= 1.05
+            }
         }
     }
     

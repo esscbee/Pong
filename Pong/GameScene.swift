@@ -230,5 +230,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        if let emitter = SKEmitterNode(fileNamed: "SparkParticles") {
+            emitter.position = contact.contactPoint
+            self.addChild(emitter)
+            
+            let shrink = SKAction.scaleTo(0, duration: 0.2)
+            let remove = SKAction.removeFromParent()
+            let seq = SKAction.sequence([shrink, remove])
+            emitter.runAction(seq)
+        }
     }
 }

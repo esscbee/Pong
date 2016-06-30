@@ -10,11 +10,16 @@ import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    // some constants
+    let BALL_NAME = "ball"
+    
     var scoreLabel : SKLabelNode?
     
     var canScore = [ SKNode ] ()
     
     var paddleTouch = false
+    
+    var ballCount = 0
     
     var score : Int = 0 {
         didSet {
@@ -36,10 +41,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func launchBall(location : CGPoint) {
         // launch a ball
-        let newBall = SKSpriteNode(imageNamed: "ball")
+        let newBall = ScbBall(imageNamed: BALL_NAME)
         newBall.position = location
-        newBall.name = "ball"
-        let theScale :CGFloat = 0.5
+        newBall.name = BALL_NAME
+        let theScale :CGFloat = 0.75
         newBall.xScale = theScale
         newBall.yScale = theScale
         let pb = SKPhysicsBody(circleOfRadius: newBall.size.width / 2.0)
@@ -56,10 +61,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         newBall.physicsBody = pb
         self.addChild(newBall)
+        
+        ballCount += 1
 
     }
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let node = self.childNodeWithName("//Paddle") {
+        if let node = self.childNodeWithName("//paddle") {
             for touch in touches {
                 let location = touch.locationInNode(self)
                 let nodeFrame = node.frame // CGRect(origin: nodePosition, size: node.frame.size)
@@ -107,36 +114,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let pb = node.physicsBody!
             var v = pb.velocity
-            let mag = pow(v.dx*v.dx + v.dy*v.dy, 0.5)
             
-            if false {
-                let mul = mag / 800.0
-                if mul < 1 {
-                    pb.velocity = CGVector(dx: v.dx / mul, dy: v.dy / mul)
-                }
-            } else {
-                let n = node
-                if true {
-                    let pt = n.position
-//                    print("ball position: \(pt)")
-                    if !CGRectContainsPoint(self.frame, pt) {
-                        // print("toDelete - frame: \(self.frame), pt: \(pt)")
-                        toDelete.append(node)
-                    } else {
-                        
-                        let minDy : CGFloat = 500.0 + CGFloat(self.score) * 5.0
-                        if abs(v.dy) < minDy {
-                            let sign : CGFloat = v.dy < 0 ? -1 : 1
-                            v = CGVector(dx:v.dx, dy: CGFloat(sign * minDy))
-                            pb.velocity = v
-                        }
-                        
-                        let minDx = CGFloat(200.0)
-                        if abs(v.dx) < minDx {
-                            let sign : CGFloat = v.dy < 0 ? -1 : 1
-                            pb.velocity = CGVector(dx: minDx * sign, dy: v.dy)
-                        }}
-                }
+            let n = node
+            if true {
+                let pt = n.position
+                //                    print("ball position: \(pt)")
+                if !CGRectContainsPoint(self.frame, pt) {
+                    // print("toDelete - frame: \(self.frame), pt: \(pt)")
+                    toDelete.append(node)
+                } else {
+                    
+                    let minDy : CGFloat = 200.0 + CGFloat(self.score) * 0.1
+                    if abs(v.dy) < minDy {
+                        let sign : CGFloat = v.dy < 0 ? -1 : 1
+                        v = CGVector(dx:v.dx, dy: CGFloat(sign * minDy))
+                        pb.velocity = v
+                    }
+                    
+                    let minDx = CGFloat(200.0)
+                    if abs(v.dx) < minDx {
+                        let sign : CGFloat = v.dy < 0 ? -1 : 1
+                        pb.velocity = CGVector(dx: minDx * sign, dy: v.dy)
+                    }}
             }
         })
         for b in toDelete {
@@ -146,7 +145,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func killBall(b : SKNode) {
         b.removeFromParent()
-        score -= 3
+        score -= ballCount
+        ballCount -= 1
     }
     
     func resetPhysics() {
@@ -163,22 +163,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func didBeginContact(contact: SKPhysicsContact) {
         var scene : SKNode?
-        var ball : SKNode?
+        var ball : ScbBall?
         var paddle : SKNode?
         
         for n in [contact.bodyA.node, contact.bodyB.node ] {
             if let s = n as? SKScene {
                 scene = s
-                ball = contact.bodyB.node
             } else if let s = n {
-                if s.name == "ball" {
+                if let bb = s as? ScbBall {
 //                    if let b = ball {
 //                        killBall(b)
 //                        killBall(s)
 //                        return
 //                    }
-                    ball = s
-                } else if s.name == "Paddle" {
+                    ball = bb
+                } else if s.name == "paddle" {
                     paddle = s
                 }
             }
@@ -186,7 +185,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let _ = scene {
             if let b = ball {
                 if let n = b.name {
-                    if n == "ball" {
+                    if n == BALL_NAME {
                         let idx = canScore.indexOf(b)
                         if idx == nil {
                             canScore.append(b)
@@ -208,10 +207,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if let _ = paddle {
                     if let idx = canScore.indexOf(b) {
                         canScore.removeAtIndex(idx)
-                        enumerateChildNodesWithName("//ball", usingBlock: {
-                            node, stop in
-                            self.score += 1
-                        })
+                        b.gotPaddled()
+                        self.score += ballCount * b.pointValue
                         paddleTouch = false
                     }
                 }
